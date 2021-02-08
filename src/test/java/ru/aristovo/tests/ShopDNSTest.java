@@ -1,7 +1,11 @@
 package ru.aristovo.tests;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import ru.aristovo.base.BaseTests;
 
 @DisplayName("Тестируем магазин DNS")
@@ -12,11 +16,13 @@ public class ShopDNSTest extends BaseTests {
     void buyPlayStationAndGames() {
 
         //здесь будет выполнен поэтапно тест
+        // 2. в поиске найти playstation
+        productSearchOnSite("playstation");
 
         sleepMyThread(5000);
 
         /*
-        2. в поиске найти playstation
+
         3. кликнуть по playstation 4 slim black
         4. запомнить цену
         5. Доп.гарантия - выбрать 2 года
@@ -47,6 +53,25 @@ public class ShopDNSTest extends BaseTests {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Метод на сайте вводит в поисковое поле наименование товара.
+     * Затем проверяет, правильно ли поле было заполнено.
+     * В конце нажимает Enter.
+     * @param productName - подается товар, который требуется найти
+     */
+    void productSearchOnSite(String productName) {
+        String productSearchFieldXPath = "//input[@placeholder='Поиск по сайту']";
+        WebElement productSearchField = driver.findElement(By.xpath(productSearchFieldXPath));
+        productSearchField.click();
+        productSearchField.sendKeys(productName);
+
+        Assertions.assertEquals(productName,
+                productSearchField.getAttribute("value"),
+                "В поле поиска пришла НЕ ПРАВИЛЬНАЯ строка");
+
+        productSearchField.sendKeys(Keys.ENTER);
     }
 
 }
