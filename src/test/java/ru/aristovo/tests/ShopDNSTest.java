@@ -106,7 +106,7 @@ public class ShopDNSTest extends BaseTests {
 
         sumBasket += sumBloodborne;
 
-        sleepMyThread(2000);
+        sleepMyThread(2000); // задержка, чтобы корзина на экране успела обновиться
 
         // 11. проверить что цена корзины стала равна сумме покупок
         String basketPriceXPath = "//a//span[@class='cart-link__price']";
@@ -116,10 +116,15 @@ public class ShopDNSTest extends BaseTests {
                 Integer.parseInt(basketPrice.getText().replace(" ", "")),
                 "Сумма в корзине не соответствует сумме добавленных товаров");
 
+        // 12. перейри в корзину
+        String selectButtonBasketXPath = "//a[@data-commerce-target='CART']";
+        WebElement selectButtonBasket = driver.findElement(By.xpath(selectButtonBasketXPath));
+        waitUtilElementToBeVisible(selectButtonBasket);
+        selectButtonBasket.click();
+
         sleepMyThread(5000);
 
         /*
-        12. перейри в корзину
         13. проверить, что для приставки выбрана гарантия на 2 года
         14. проверить цену каждого из товаров и сумму
         15. удалить из корзины Detroit
