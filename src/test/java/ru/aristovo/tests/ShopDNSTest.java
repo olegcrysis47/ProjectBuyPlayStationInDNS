@@ -57,10 +57,15 @@ public class ShopDNSTest extends BaseTests {
         Assertions.assertNotEquals(sumPSWithGuarantee, sumPSNotGuarantee,
                 "После включения гарантии сумма НЕ ИЗМЕНИЛАСЬ!");
 
+        // 7. Нажать Купить
+        String buttonBuyXPath = "//button[contains(.,'Купить')]";
+        WebElement buttonBuy = driver.findElement(By.xpath(buttonBuyXPath));
+        waitUtilElementToBeClickable(buttonBuy);
+        buttonBuy.click();
+
         sleepMyThread(5000);
 
         /*
-        7. Нажать Купить
         8. выполнить поиск Detroit
         9. запомнить цену
         10. нажать купить
