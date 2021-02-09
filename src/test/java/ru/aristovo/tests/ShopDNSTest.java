@@ -41,12 +41,15 @@ public class ShopDNSTest extends BaseTests {
         WebElement psPrice = driver.findElement(By.xpath(psPriceXPath));
         sumPSNotGuarantee = Integer.parseInt(psPrice.getText().replaceAll("\\W", ""));
 
-
+        // 5. Доп.гарантия - выбрать 2 года
+        String guaranteeTwoYearXPath = "//select//option[@value='1']";
+        WebElement guaranteeTwoYear = driver.findElement(By.xpath(guaranteeTwoYearXPath));
+        waitUtilElementToBeClickable(guaranteeTwoYear);
+        guaranteeTwoYear.click();
 
         sleepMyThread(5000);
 
         /*
-        5. Доп.гарантия - выбрать 2 года
         6. дождаться изменения цены и запомнить цену с гарантией
         7. Нажать Купить
         8. выполнить поиск Detroit
