@@ -18,10 +18,10 @@ public class BaseTests {
         System.setProperty("webdriver.chrome.driver", "src/test/resources/webdriver/chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
-        wait = new WebDriverWait(driver, 50, 1000);
+        wait = new WebDriverWait(driver, 70, 1000);
 
         // 1. открыть dns-shop
         String baseUrl = "https://www.dns-shop.ru/";
