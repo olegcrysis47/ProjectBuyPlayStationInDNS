@@ -6,7 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.aristovo.base.BaseTests;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @DisplayName("Тестируем магазин DNS")
 public class ShopDNSTest extends BaseTests {
@@ -19,15 +23,12 @@ public class ShopDNSTest extends BaseTests {
         // 2. в поиске найти playstation
         productSearchOnSite("playstation");
 
+        // 3. кликнуть по playstation 4 slim black
+        productSelectOnSite("playstation 4 slim black");
+
         sleepMyThread(5000);
 
-        productSearchOnSite("detroit");
-
-        sleepMyThread(6000);
-
         /*
-
-        3. кликнуть по playstation 4 slim black
         4. запомнить цену
         5. Доп.гарантия - выбрать 2 года
         6. дождаться изменения цены и запомнить цену с гарантией
@@ -56,6 +57,33 @@ public class ShopDNSTest extends BaseTests {
             Thread.sleep(i);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Метод ждет когда WEB-элемент станет кликабельным.
+     * @param element - WEB-элемент, на который нужно будет кликнуть.
+     */
+    void waitUtilElementToBeClickable(WebElement element) {
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+    /**
+     * Метод для выбора нужной позиции, после поиска на сайте, когда мы видим список доступных товаров.
+     * @param productName - частичное или полное наименование искомого продукта.
+     */
+    void productSelectOnSite(String productName) {
+        WebElement titleProduct;
+        String productSelectXPath = "//div[@class='n-catalog-product__main']";
+        List<WebElement> webList = new ArrayList<WebElement>();
+        webList = (ArrayList<WebElement>) driver.findElements(By.xpath(productSelectXPath));
+        for (WebElement w : webList) {
+            titleProduct = w.findElement(By.xpath(".//a[@class='ui-link']"));
+            if (titleProduct.getText().toLowerCase().contains(productName)) {
+                waitUtilElementToBeClickable(titleProduct);
+                titleProduct.click();
+                break;
+            }
         }
     }
 
