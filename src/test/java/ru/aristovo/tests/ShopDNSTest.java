@@ -122,6 +122,21 @@ public class ShopDNSTest extends BaseTests {
         waitUtilElementToBeVisible(selectButtonBasket);
         selectButtonBasket.click();
 
+        // формируем лист с товарами из корзины
+        String basketListProductXPath = "//div[@class='cart-items__product']";
+        List<WebElement> basketListProduct =
+                (ArrayList<WebElement>) driver.findElements(By.xpath(basketListProductXPath));
+        for (WebElement w : basketListProduct) {
+            WebElement titleProduct = w.findElement(By.xpath(".//div[@class='cart-items__product-name']//a"));
+            if (titleProduct.getText().toLowerCase().contains("playstation")) {
+                WebElement gurTwoYears = w.findElement(By.xpath(".//div[@data-commerce-target='basket_additional_warranty_24']"));
+                waitUtilElementToBeVisible(gurTwoYears);
+                Assertions.assertEquals("base-ui-radio-button__icon base-ui-radio-button__icon_checked",
+                        gurTwoYears.getAttribute("class"),
+                        "Кнопка НЕ УСТАНОВЛЕНА на гарантии 2 года!");
+            }
+        }
+
         sleepMyThread(5000);
 
         /*
