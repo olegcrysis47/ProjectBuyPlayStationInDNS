@@ -106,12 +106,19 @@ public class ShopDNSTest extends BaseTests {
 
         sumBasket += sumBloodborne;
 
-        System.out.println("sumBasket = " + sumBasket);
+        sleepMyThread(2000);
+
+        // 11. проверить что цена корзины стала равна сумме покупок
+        String basketPriceXPath = "//a//span[@class='cart-link__price']";
+        WebElement basketPrice = driver.findElement(By.xpath(basketPriceXPath));
+
+        Assertions.assertEquals(sumBasket,
+                Integer.parseInt(basketPrice.getText().replace(" ", "")),
+                "Сумма в корзине не соответствует сумме добавленных товаров");
 
         sleepMyThread(5000);
 
         /*
-        11. проверить что цена корзины стала равна сумме покупок
         12. перейри в корзину
         13. проверить, что для приставки выбрана гарантия на 2 года
         14. проверить цену каждого из товаров и сумму
