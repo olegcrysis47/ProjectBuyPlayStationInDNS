@@ -21,6 +21,10 @@ public class ShopDNSTest extends BaseTests {
 
         sleepMyThread(5000);
 
+        productSearchOnSite("detroit");
+
+        sleepMyThread(6000);
+
         /*
 
         3. кликнуть по playstation 4 slim black
@@ -64,6 +68,7 @@ public class ShopDNSTest extends BaseTests {
     void productSearchOnSite(String productName) {
         String productSearchFieldXPath = "//input[@placeholder='Поиск по сайту']";
         WebElement productSearchField = driver.findElement(By.xpath(productSearchFieldXPath));
+        productSearchField.clear();
         productSearchField.click();
         productSearchField.sendKeys(productName);
 
