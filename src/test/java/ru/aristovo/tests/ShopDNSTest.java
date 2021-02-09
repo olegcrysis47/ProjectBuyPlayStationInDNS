@@ -20,7 +20,7 @@ public class ShopDNSTest extends BaseTests {
     static int sumPSNotGuarantee;   // сумма PS без гарантии
     static int sumPSWithGuarantee;  // сумма PS с гарантией
     static int sumDetroit;          // сумма диска Детроит
-    static int sumCyberpunk;        // сумма диска Киберпанк
+    static int sumBloodborne;       // сумма диска bloodborne
 
 
     @Test
@@ -87,6 +87,26 @@ public class ShopDNSTest extends BaseTests {
 
         sumBasket += sumDetroit;
 
+        // дополнительно покупка bloodborne
+        // поиск bloodborne
+        productSearchOnSite("bloodborne");
+        // выбираем версию игры
+        productSelectOnSite("Хиты PlayStation");
+        // запоминаем цену bloodborne
+        String blPriceXPath = "//div//span[@class='product-card-price__current']";
+        WebElement blPrice = driver.findElement(By.xpath(blPriceXPath));
+        waitUtilElementToBeVisible(blPrice);
+        sumBloodborne = Integer.parseInt(blPrice.getText().replaceAll("\\W", ""));
+        // покупаем bloodborne
+        String buttonBuyBlXPath = "//button[contains(.,'Купить')]";
+        WebElement buttonBuyBl = driver.findElement(By.xpath(buttonBuyBlXPath));
+        waitUtilElementToBeVisible(buttonBuyBl);
+        waitUtilElementToBeClickable(buttonBuyBl);
+        buttonBuyBl.click();
+
+        sumBasket += sumBloodborne;
+
+        System.out.println("sumBasket = " + sumBasket);
 
         sleepMyThread(5000);
 
@@ -142,7 +162,7 @@ public class ShopDNSTest extends BaseTests {
         webList = (ArrayList<WebElement>) driver.findElements(By.xpath(productSelectXPath));
         for (WebElement w : webList) {
             titleProduct = w.findElement(By.xpath(".//a[@class='ui-link']"));
-            if (titleProduct.getText().toLowerCase().contains(productName)) {
+            if (titleProduct.getText().toLowerCase().contains(productName.toLowerCase())) {
                 waitUtilElementToBeClickable(titleProduct);
                 titleProduct.click();
                 break;
