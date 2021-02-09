@@ -47,10 +47,19 @@ public class ShopDNSTest extends BaseTests {
         waitUtilElementToBeClickable(guaranteeTwoYear);
         guaranteeTwoYear.click();
 
+        // 6. дождаться изменения цены и запомнить цену с гарантией
+        String psPriceWithGurXPath =
+                "//div//span[@class='product-card-price__current product-card-price__current_active']";
+        WebElement psPriceWithGur = driver.findElement(By.xpath(psPriceWithGurXPath));
+        sumPSWithGuarantee = Integer.parseInt(psPriceWithGur.getText().replaceAll("\\W", ""));
+
+        // проверка, что цена с гарантией отличается без гарантии
+        Assertions.assertNotEquals(sumPSWithGuarantee, sumPSNotGuarantee,
+                "После включения гарантии сумма НЕ ИЗМЕНИЛАСЬ!");
+
         sleepMyThread(5000);
 
         /*
-        6. дождаться изменения цены и запомнить цену с гарантией
         7. Нажать Купить
         8. выполнить поиск Detroit
         9. запомнить цену
