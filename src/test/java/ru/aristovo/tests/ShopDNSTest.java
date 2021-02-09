@@ -39,11 +39,13 @@ public class ShopDNSTest extends BaseTests {
         // 4. запомнить цену
         String psPriceXPath = "//div//span[@class='product-card-price__current']";
         WebElement psPrice = driver.findElement(By.xpath(psPriceXPath));
+        waitUtilElementToBeVisible(psPrice);
         sumPSNotGuarantee = Integer.parseInt(psPrice.getText().replaceAll("\\W", ""));
 
         // 5. Доп.гарантия - выбрать 2 года
         String guaranteeTwoYearXPath = "//select//option[@value='1']";
         WebElement guaranteeTwoYear = driver.findElement(By.xpath(guaranteeTwoYearXPath));
+        waitUtilElementToBeVisible(guaranteeTwoYear);
         waitUtilElementToBeClickable(guaranteeTwoYear);
         guaranteeTwoYear.click();
 
@@ -51,6 +53,7 @@ public class ShopDNSTest extends BaseTests {
         String psPriceWithGurXPath =
                 "//div//span[@class='product-card-price__current product-card-price__current_active']";
         WebElement psPriceWithGur = driver.findElement(By.xpath(psPriceWithGurXPath));
+        waitUtilElementToBeVisible(psPriceWithGur);
         sumPSWithGuarantee = Integer.parseInt(psPriceWithGur.getText().replaceAll("\\W", ""));
 
         // проверка, что цена с гарантией отличается без гарантии
@@ -58,17 +61,36 @@ public class ShopDNSTest extends BaseTests {
                 "После включения гарантии сумма НЕ ИЗМЕНИЛАСЬ!");
 
         // 7. Нажать Купить
-        String buttonBuyXPath = "//button[contains(.,'Купить')]";
-        WebElement buttonBuy = driver.findElement(By.xpath(buttonBuyXPath));
-        waitUtilElementToBeClickable(buttonBuy);
-        buttonBuy.click();
+        String buttonBuyPSXPath = "//button[contains(.,'Купить')]";
+        WebElement buttonBuyPS = driver.findElement(By.xpath(buttonBuyPSXPath));
+        waitUtilElementToBeVisible(buttonBuyPS);
+        waitUtilElementToBeClickable(buttonBuyPS);
+        buttonBuyPS.click();
+
+        sumBasket += sumPSWithGuarantee;
+
+        // 8. выполнить поиск Detroit
+        productSearchOnSite("Detroit");
+
+        // 9. запомнить цену Detroit
+        String detPriceXPath = "//div//span[@class='product-card-price__current']";
+        WebElement detPrice = driver.findElement(By.xpath(detPriceXPath));
+        waitUtilElementToBeVisible(detPrice);
+        sumDetroit = Integer.parseInt(detPrice.getText().replaceAll("\\W", ""));
+
+        // 10. нажать купить Detroit
+        String buttonBuyDetXPath = "//button[contains(.,'Купить')]";
+        WebElement buttonBuyDet = driver.findElement(By.xpath(buttonBuyDetXPath));
+        waitUtilElementToBeVisible(buttonBuyDet);
+        waitUtilElementToBeClickable(buttonBuyDet);
+        buttonBuyDet.click();
+
+        sumBasket += sumDetroit;
+
 
         sleepMyThread(5000);
 
         /*
-        8. выполнить поиск Detroit
-        9. запомнить цену
-        10. нажать купить
         11. проверить что цена корзины стала равна сумме покупок
         12. перейри в корзину
         13. проверить, что для приставки выбрана гарантия на 2 года
@@ -101,6 +123,14 @@ public class ShopDNSTest extends BaseTests {
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
+    private void waitUtilElementToBeVisible(By locator) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    private void waitUtilElementToBeVisible(WebElement element) {
+        wait.until(ExpectedConditions.visibilityOf(element));
+    }
+
     /**
      * Метод для выбора нужной позиции, после поиска на сайте, когда мы видим список доступных товаров.
      * @param productName - частичное или полное наименование искомого продукта.
@@ -129,6 +159,7 @@ public class ShopDNSTest extends BaseTests {
     void productSearchOnSite(String productName) {
         String productSearchFieldXPath = "//input[@placeholder='Поиск по сайту']";
         WebElement productSearchField = driver.findElement(By.xpath(productSearchFieldXPath));
+        waitUtilElementToBeVisible(productSearchField);
         productSearchField.clear();
         productSearchField.click();
         productSearchField.sendKeys(productName);
