@@ -15,6 +15,14 @@ import java.util.List;
 @DisplayName("Тестируем магазин DNS")
 public class ShopDNSTest extends BaseTests {
 
+    // переменные
+    static int sumBasket;           // сумма корзины
+    static int sumPSNotGuarantee;   // сумма PS без гарантии
+    static int sumPSWithGuarantee;  // сумма PS с гарантией
+    static int sumDetroit;          // сумма диска Детроит
+    static int sumCyberpunk;        // сумма диска Киберпанк
+
+
     @Test
     @DisplayName("Тест покупки PlayStation и пары дисков с играми")
     void buyPlayStationAndGames() {
@@ -26,10 +34,18 @@ public class ShopDNSTest extends BaseTests {
         // 3. кликнуть по playstation 4 slim black
         productSelectOnSite("playstation 4 slim black");
 
+        // ПОКА ИДЕМ СТРОГО ПО ШАБЛОНУ
+        // ВОЗМОЖНО можно будет создать дополнительный класс "ТОВАР"
+        // 4. запомнить цену
+        String psPriceXPath = "//div//span[@class='product-card-price__current']";
+        WebElement psPrice = driver.findElement(By.xpath(psPriceXPath));
+        sumPSNotGuarantee = Integer.parseInt(psPrice.getText().replaceAll("\\W", ""));
+
+
+
         sleepMyThread(5000);
 
         /*
-        4. запомнить цену
         5. Доп.гарантия - выбрать 2 года
         6. дождаться изменения цены и запомнить цену с гарантией
         7. Нажать Купить
